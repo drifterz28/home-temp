@@ -83,6 +83,9 @@ const useStyles = makeStyles({
   image: {
     maxWidth: '100%',
     maxHeight: 'auto',
+    '& @media screen and (orientation: landscape)': {
+      transform: 'rotate(-90deg)'
+    }
   },
   rooms: {
     position: 'absolute',

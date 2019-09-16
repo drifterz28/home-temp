@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon app.js",
-    "build": "parcel build ./src/index.html",
-    "start": "pm2 start --input-type=module --experimental-modules app.js"
+    "build": "NODE_ENV=production parcel build ./src/index.html",
+    "start": "NODE_ENV=production pm2 start --input-type=module --experimental-modules app.js"
   },
   "nodemonConfig": {
     "ignore": [
