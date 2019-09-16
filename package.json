@@ -4,28 +4,31 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "dev": "nodemon app.js",
     "build": "parcel build ./src/index.html",
-    "start": "yarn build && yarn nodemon app.js"
+    "start": "pm2 start --input-type=module --experimental-modules app.js"
   },
   "nodemonConfig": {
     "ignore": [
-      "src/*",
+      ".cache/*",
       "dist/*",
-      ".cache/*"
+      "node_modules/*",
+      "yarn.log",
+      "*.sqlite"
     ]
   },
   "dependencies": {
     "@material-ui/core": "^4.4.1",
     "@material-ui/styles": "^4.4.1",
     "express": "^4.17.1",
-    "nodemon": "^1.19.2",
+    "pm2": "^3.5.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "recharts": "^1.7.1",
-    "sqlite3": "^4.1.0"
+    "sqlite": "^3.0.3"
   },
   "devDependencies": {
+    "nodemon": "^1.19.2",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-static-files-copy": "^2.2.1"
   }

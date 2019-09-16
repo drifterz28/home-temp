@@ -6,6 +6,9 @@ const env = process.env;
 const app = express();
 const bundler = new Bundler('./src/index.html');
 const port = process.env.PORT || 3000;
+
+const api = require('./src/api');
+
 app.set('port', port);
 
 app.use((req, res, next) => {
@@ -21,6 +24,10 @@ app.use(express.static('dist'));
 
 app.get('/test', (req, res) => {
   res.send('Hello World!');
+});
+
+app.get('/api', (req, res) => {
+  api(req, res);
 });
 
 app.use(bundler.middleware());
