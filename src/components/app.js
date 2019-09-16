@@ -93,7 +93,6 @@ const useStyles = makeStyles({
     border: 0,
     borderRadius: 3,
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-    color: 'white',
     padding: '0 30px',
     position: 'relative'
   },
@@ -150,6 +149,7 @@ const App = () => {
 
   return (
     <Container maxWidth='sm' className={styles.root}>
+      <h2>Test</h2>
       <img src='apartment.png' className={styles.image}/>
       <Fab onClick={handleOpen} value='living' color='primary' variant='extended' className={`${styles.rooms} living`}>72°</Fab>
       <Fab onClick={handleOpen} value='outside' color='secondary' variant='extended' className={`${styles.rooms} outside`}>87°</Fab>
