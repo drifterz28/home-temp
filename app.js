@@ -37,7 +37,7 @@ app.get('/api/temp', (req, res) => {
 
 app.post('/api/build', (req, res) => {
   //6T0n4yOxauzjIWQ9TnmC6oiC42sDGYMP
-  send(JSON.stringify(req.body));
+  res.status(200).send(JSON.stringify(req.body));
 });
 
 app.get('/', bundler.middleware());
