@@ -35,9 +35,10 @@ app.get('/api/temp', (req, res) => {
   api(req, res);
 });
 
+app.use(express.json())
 app.post('/api/build', (req, res) => {
   //6T0n4yOxauzjIWQ9TnmC6oiC42sDGYMP
-  res.status(200).send(JSON.stringify(req.body));
+  res.json(req.body);
 });
 
 app.get('/', bundler.middleware());
