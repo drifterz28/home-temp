@@ -16,7 +16,8 @@
       "dist/*",
       "node_modules/*",
       "yarn.log",
-      "*.sqlite"
+      "*.sqlite",
+      "src/components/*"
     ]
   },
   "dependencies": {

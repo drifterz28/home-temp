@@ -1,26 +1,11 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
-import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
-const fetchData = () => {
-  fetch('/api/build', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify({key: "value"}), // body data type must match "Content-Type" header
-  })
-  .then(response => response.json());
-}
+import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 const data = [
   {
@@ -97,9 +82,10 @@ const useStyles = makeStyles({
     position: 'relative'
   },
   image: {
-    maxWidth: '100%',
-    maxHeight: 'auto',
-    '& @media screen and (orientation: landscape)': {
+    maxWidth: '100%'
+  },
+  landscape: {
+    '& .apartment': {
       transform: 'rotate(-90deg)'
     }
   },
@@ -140,21 +126,19 @@ const App = () => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState('');
-
+  const matches = useMediaQuery('(orientation: portrait)');
   const handleOpen = e => {
-    fetchData()
     setRoom(e.currentTarget.value);
     setOpen(true);
   };
 
   return (
-    <Container maxWidth='sm' className={styles.root}>
-      <h2>Test</h2>
-      <img src='apartment.png' className={styles.image}/>
-      <Fab onClick={handleOpen} value='living' color='primary' variant='extended' className={`${styles.rooms} living`}>72°</Fab>
-      <Fab onClick={handleOpen} value='outside' color='secondary' variant='extended' className={`${styles.rooms} outside`}>87°</Fab>
-      <Fab onClick={handleOpen} value='master' color='primary' variant='extended' className={`${styles.rooms} master`}>68°</Fab>
-      <Fab onClick={handleOpen} value='spare' color='primary' variant='extended' className={`${styles.rooms} spare`}>65°</Fab>
+    <Container maxWidth='sm' className={`${styles.root}`}>
+      <img src='apartment.png' className={`${styles.image} apartment`}/>
+      <Fab onClick={handleOpen} value='living' color='primary' variant='extended' className={`${styles.rooms} rooms living`}>72°</Fab>
+      <Fab onClick={handleOpen} value='outside' color='secondary' variant='extended' className={`${styles.rooms} rooms outside`}>87°</Fab>
+      <Fab onClick={handleOpen} value='master' color='primary' variant='extended' className={`${styles.rooms} rooms master`}>68°</Fab>
+      <Fab onClick={handleOpen} value='spare' color='primary' variant='extended' className={`${styles.rooms} rooms spare`}>65°</Fab>
       <Modal
         open={open}
         onClose={() => setOpen(false)}
