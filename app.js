@@ -13,6 +13,7 @@ const bundler = new Bundler('./src/index.html', {
 const port = process.env.PORT || 3000;
 
 const api = require('./src/api');
+const gitBuild = require('./src/git-build');
 
 app.set('port', port);
 
@@ -37,8 +38,7 @@ app.get('/api/temp', (req, res) => {
 
 app.use(express.json())
 app.post('/api/build', (req, res) => {
-  //6T0n4yOxauzjIWQ9TnmC6oiC42sDGYMP
-  res.json(req.body);
+  gitBuild(req, res);
 });
 
 app.get('/', bundler.middleware());
@@ -49,5 +49,4 @@ app.use(function(req, res, next) {
 
 app.listen(port, () => {
   console.log(`Node app is running on http://0.0.0.0:${port}`);
-  console.log('ENV: ', process.env.NODE_ENV);
 });
