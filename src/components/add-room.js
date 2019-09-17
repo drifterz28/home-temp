@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/styles';
@@ -14,6 +14,8 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+import { get } from '../fetch';
 
 const useStyles = makeStyles({
   paper: {
@@ -36,9 +38,32 @@ const useStyles = makeStyles({
 const AddRoom = () => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
-  const toggleModel = e => {
+  const [room, setRoom] = useState({});
+  const [form, setForm] = useState({room: '', ip: ''});
+  const [rooms, setRooms] = useState([]);
+  const toggleModel = () => {
     setOpen(!open);
   };
+
+  const handleChange = name => event => {
+    setForm({ ...form, [name]: event.target.value });
+  };
+  const selectRoom = event => {
+    const id = +event.target.value
+    const selectedRoom = rooms.filter(room => room.id === id);
+    setForm({
+      room: selectedRoom[0].name,
+      ip: selectedRoom[0].ip
+    });
+  };
+  useEffect(() => {
+    if(open && rooms.length === 0) {
+      get('/api/rooms').then(data => {
+        setRooms(data);
+      });
+    }
+  }, [open]);
+  console.log(rooms)
   return (
     <div>
       <Fab color="secondary" aria-label="edit" onClick={toggleModel}>
@@ -54,21 +79,22 @@ const AddRoom = () => {
               Edit room
             </Typography>
             <FormControl variant="outlined" className={styles.formControl}>
-              <InputLabel htmlFor="outlined-age-native">
-                Age
+              <InputLabel htmlFor="outlined-room-native">
+                Room
               </InputLabel>
               <Select
                 native
-                labelWidth={30}
+                labelWidth={40}
+                onChange={selectRoom}
                 inputProps={{
-                  name: 'age',
-                  id: 'outlined-age-native',
+                  name: 'room',
+                  id: 'outlined-room-native',
                 }}
               >
                 <option value="" />
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
+                {rooms.map((room, i) => {
+                  return (<option key={i} value={room.id}>{room.name}</option>)
+                })}
               </Select>
             </FormControl>
             <Fab aria-label="delete">
@@ -81,7 +107,8 @@ const AddRoom = () => {
             <TextField
               id="room-name"
               label="Room Name"
-              defaultValue="foo"
+              value={form.room}
+              onChange={handleChange('room')}
               margin="normal"
               variant="outlined"
             />
@@ -89,13 +116,14 @@ const AddRoom = () => {
             <TextField
               id="ip-name"
               label="Ip address"
-              defaultValue="foo"
+              onChange={handleChange('ip')}
+              value={form.ip}
               margin="normal"
               variant="outlined"
             />
             <br/>
             <ButtonGroup fullWidth>
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" color="secondary" onClick={toggleModel}>
                 Cancel
               </Button>
               <Button variant="contained" color='primary'>

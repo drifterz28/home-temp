@@ -1,6 +1,6 @@
 const sqlite = require('sqlite');
-const format = require('date-fns/format')
-const subDays = require('date-fns/subDays')
+const format = require('date-fns/format');
+const subDays = require('date-fns/subDays');
 
 const dateRanges = {
   day: 1,

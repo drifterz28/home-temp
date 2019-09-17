@@ -15,10 +15,14 @@ const port = process.env.PORT || 3000;
 
 const dbPromise = Promise.resolve()
   .then(() => sqlite.open('./sqlite.sqlite', { Promise }))
-  .then(db => db.migrate({}));
+  .then(db => db.migrate({force: false}))
+  .catch(err => {
+    // console.log(err)
+  });
 
 const api = require('./src/api');
 const gitBuild = require('./src/git-build');
+const { getRooms, updateRooms, deleteRoom } = require('./src/rooms');
 
 app.set('port', port);
 
@@ -42,6 +46,23 @@ app.get('/api/temp', (req, res) => {
 });
 
 app.use(express.json())
+
+app.route('/api/rooms')
+  .get((req, res) => {
+    getRooms(req, res);
+  })
+  .put((req, res, next) => {
+    // maybe
+    next(new Error('not implemented'))
+  })
+  .post((req, res) => {
+    updateRooms(req, res);
+  })
+  .delete((req, res, next) => {
+    deleteRoom(req, res);
+  });
+
+
 app.post('/api/build', (req, res) => {
   gitBuild(req, res);
 });
