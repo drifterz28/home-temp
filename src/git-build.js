@@ -8,4 +8,3 @@ module.exports = (req, res) => {
   deploy.unref();
   res.status(200).json({all: 'good'});
 };
-//osascript -e 'display notification "hello world!"'

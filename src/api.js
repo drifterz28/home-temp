@@ -1,27 +1,37 @@
 const sqlite = require('sqlite');
-const dbPromise = sqlite.open('./sqlite.sqlite', { Promise });
+const format = require('date-fns/format')
+const subDays = require('date-fns/subDays')
 
-const dbRun = (query) => {
-  // db.serialize(() => {
-  //   // db.run("CREATE TABLE temps (ip TEXT, temp TEXT, hum Text, timestamp TEXT)");
-  //   db.run("INSERT INTO temps VALUES ($ip, $temp, $hum, strftime('%Y-%m-%dT%H:%M:%S', 'now'))", [ query.ip, query.temp, query.hum ]);
-
-  //   db.each("SELECT rowid AS id, * FROM temps", function(err, row) {
-  //       // console.log({row});
-  //   });
-  // });
+const dateRanges = {
+  day: 1,
+  week: 7,
+  month: 30
 };
 
-const dbGet = () => {
-  const data = [];
-  // db.serialize(() => {
-  //   db.each("SELECT rowid AS id, * FROM temps", (err, row) => {
-  //       console.log(row);
-  //       data.push(row);
-  //   });
-  // });
-  console.log(data)
-  return data;
+const getDateRange = (range) => {
+  const dayRange = dateRanges[range];
+  const date = subDays(new Date(), dayRange);
+
+  return {
+    start: format(new Date(), 'yyyy-MM-dd') + 'T23:59:59',
+    end: format(date, 'yyyy-MM-dd') + 'T00:00:00'
+  };
+};
+
+async function dbRun(query) {
+  const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
+  dbPromise.run("INSERT INTO temps VALUES ($ip, $temp, $hum, strftime('%Y-%m-%dT%H:%M:%S', 'now'))", [ query.ip, query.temp, query.hum ]);
+};
+
+async function dbGet({room, range = 'day'}) {
+  const dateRange = getDateRange(range);
+  const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
+  const roomIp = await dbPromise.all(`SELECT ip FROM rooms WHERE name = '${room}'`);
+  const roomData = await dbPromise.all(`SELECT * FROM temps WHERE ip = '${roomIp[0].ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`);
+  return {
+    room,
+    data: roomData
+  };
 }
 
 module.exports = (req, res) => {
@@ -30,8 +40,16 @@ module.exports = (req, res) => {
   req.connection.remoteAddress ||
   req.socket.remoteAddress ||
   (req.connection.socket ? req.connection.socket.remoteAddress : null);
-  dbRun({...query, ip});
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(dbGet()));
+  if(query.temp) {
+    dbRun({...query, ip});
+    res.status(200).json({all: 'good'});
+  } else
+  if(query.room) {
+    dbGet(query).then(data => {
+      res.send(JSON.stringify(data));
+    });
+  } else {
+    res.status(200).json({all: 'sweet'});
+  }
 };
-//6T0n4yOxauzjIWQ9TnmC6oiC42sDGYMP

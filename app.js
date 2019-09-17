@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const Bundler = require('parcel-bundler');
+const sqlite = require('sqlite');
 
 const env = process.env;
 const app = express();
@@ -11,6 +12,10 @@ const bundler = new Bundler('./src/index.html', {
   watch: true,
 });
 const port = process.env.PORT || 3000;
+
+const dbPromise = Promise.resolve()
+  .then(() => sqlite.open('./sqlite.sqlite', { Promise }))
+  .then(db => db.migrate({}));
 
 const api = require('./src/api');
 const gitBuild = require('./src/git-build');

@@ -1,0 +1,10 @@
+{
+  "sqltools.connections": [
+    {
+      "database": "./sqlite.sqlite",
+      "dialect": "SQLite",
+      "name": "home-iot"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}

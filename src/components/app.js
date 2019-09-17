@@ -1,3 +1,4 @@
+import 'typeface-roboto';
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
@@ -6,6 +7,8 @@ import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
 
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+
+import AddRoom from './add-room';
 
 const data = [
   {
@@ -155,6 +158,7 @@ const App = () => {
           </AreaChart>
         </div>
       </Modal>
+      <AddRoom />
     </Container>
   )
 };
