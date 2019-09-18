@@ -9,7 +9,7 @@ const bundler = new Bundler('./src/index.html', {
   outDir: './dist',
   outFile: 'index.html',
   publicUrl: './',
-  watch: true,
+  watch: process.env.NODE_ENV !== 'production',
   sourceMaps: process.env.NODE_ENV !== 'production'
 });
 const port = process.env.PORT || 3000;
@@ -22,6 +22,9 @@ app.set('port', port);
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
+  if(process.env.NODE_ENV !== 'production') {
+    res.setHeader("Cache-Control", "public, max-age=2592000");
+  }
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
