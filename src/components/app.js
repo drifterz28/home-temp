@@ -7,7 +7,7 @@ import Modal from '@material-ui/core/Modal';
 
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
-import AddRoom from './add-room';
+import RoomModel from './room-model';
 
 const data = [
   {
@@ -157,7 +157,7 @@ const App = () => {
           </AreaChart>
         </div>
       </Modal>
-      <AddRoom />
+      <RoomModel />
     </Container>
   )
 };

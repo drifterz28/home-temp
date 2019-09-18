@@ -17,6 +17,11 @@ const fetcher = (url, options = {}) => {
 export const get = url => fetcher(url);
 
 export const post = (url, data) => fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  })
+  method: 'POST',
+  body: JSON.stringify(data),
+});
+
+export const fetchDelete = (url, data) => fetcher(url, {
+  method: 'DELETE',
+  body: JSON.stringify(data),
+});
