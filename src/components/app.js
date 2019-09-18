@@ -1,4 +1,3 @@
-import 'typeface-roboto';
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
