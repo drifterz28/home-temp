@@ -10,6 +10,7 @@ const bundler = new Bundler('./src/index.html', {
   outFile: 'index.html',
   publicUrl: './',
   watch: true,
+  sourceMaps: process.env.NODE_ENV !== 'production'
 });
 const port = process.env.PORT || 3000;
 

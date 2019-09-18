@@ -8,7 +8,7 @@
     "build": "NODE_ENV=production parcel build ./src/index.html",
     "stop": "pm2 stop app",
     "start": "NODE_ENV=production yarn build && pm2 start app.js",
-    "deploy": "git pull && yarn stop && yarn start"
+    "deploy": "git pull && yarn && yarn stop && yarn start"
   },
   "nodemonConfig": {
     "ignore": [
