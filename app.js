@@ -13,13 +13,6 @@ const bundler = new Bundler('./src/index.html', {
 });
 const port = process.env.PORT || 3000;
 
-const dbPromise = Promise.resolve()
-  .then(() => sqlite.open('./sqlite.sqlite', { Promise }))
-  .then(db => db.migrate({force: false}))
-  .catch(err => {
-    // console.log(err)
-  });
-
 const api = require('./src/api');
 const gitBuild = require('./src/git-build');
 const { getRooms, updateRooms, deleteRoom } = require('./src/rooms');

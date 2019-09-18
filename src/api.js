@@ -1,3 +1,5 @@
+// todo: add "last temp" from each room on load.
+//       add db catch to install
 const sqlite = require('sqlite');
 const format = require('date-fns/format');
 const subDays = require('date-fns/subDays');

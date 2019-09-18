@@ -1,9 +1,17 @@
 const sqlite = require('sqlite');
+const buildSql = require('./build-sql');
 
 async function getRooms(req, res) {
   const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
-  const rooms = await dbPromise.all(`SELECT rowid AS id, * FROM rooms`);
-  res.status(200).json(rooms);
+  dbPromise.all(`SELECT rowid AS id, * FROM rooms`).then((rooms) => {
+    res.status(200).json(rooms);
+  }).catch((err) => {
+    if(err.errno === 1) {
+      buildSql('rooms').then(() => {
+        getRooms(req, res);
+      })
+    }
+  });
 }
 
 const updateRooms = (req, res) => {

@@ -71,36 +71,40 @@ const AddRoom = () => {
       </Fab>
       <Modal
         open={open}
+        disableBackdropClick
         onClose={toggleModel}
       >
         <Paper className={styles.paper}>
           <form>
-            <Typography variant="h6">
-              Edit room
-            </Typography>
-            <FormControl variant="outlined" className={styles.formControl}>
-              <InputLabel htmlFor="outlined-room-native">
-                Room
-              </InputLabel>
-              <Select
-                native
-                labelWidth={40}
-                onChange={selectRoom}
-                inputProps={{
-                  name: 'room',
-                  id: 'outlined-room-native',
-                }}
-              >
-                <option value="" />
-                {rooms.map((room, i) => {
-                  return (<option key={i} value={room.id}>{room.name}</option>)
-                })}
-              </Select>
-            </FormControl>
-            <Fab aria-label="delete">
-              <DeleteIcon />
-            </Fab>
-            <Divider />
+            {rooms.length > 0 &&
+            <>
+              <Typography variant="h6">
+                Edit room
+              </Typography>
+              <FormControl variant="outlined" className={styles.formControl}>
+                <InputLabel htmlFor="outlined-room-native">
+                  Room
+                </InputLabel>
+                <Select
+                  native
+                  labelWidth={40}
+                  onChange={selectRoom}
+                  inputProps={{
+                    name: 'room',
+                    id: 'outlined-room-native',
+                  }}
+                >
+                  <option value="" />
+                  {rooms.map((room, i) => {
+                    return (<option key={i} value={room.id}>{room.name}</option>)
+                  })}
+                </Select>
+              </FormControl>
+              <Fab aria-label="delete">
+                <DeleteIcon />
+              </Fab>
+              <Divider />
+            </>}
             <Typography variant="h6">
               Add room
             </Typography>
