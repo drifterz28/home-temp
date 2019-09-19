@@ -1,13 +1,12 @@
 {
-  "name": "home-iot",
+  "name": "home-temp",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --inspect app.js",
-    "heroku-postbuild": "yarn build",
+    "dev": "nodemon --inspect index.js",
     "build": "parcel build ./src/index.html",
-    "start": "NODE_ENV=production node app.js"
+    "start": "NODE_ENV=production node index.js"
   },
   "engines": {
     "node": "10.x"
