@@ -5,19 +5,16 @@ const sqlite = require('sqlite');
 
 const env = process.env;
 const app = express();
+
 if(process.env.NODE_ENV !== 'production') {
-  const bundler = new Bundler('./src/index.html', {
-    outDir: './dist',
-    outFile: 'index.html',
-    publicUrl: './',
-    watch: process.env.NODE_ENV !== 'production'
-  });
+  const bundler = new Bundler('./src/index.html');
 }
+
 const port = process.env.PORT || 5000;
 
-const api = require('./src/api');
-const gitBuild = require('./src/git-build');
-const { getRooms, updateRooms, deleteRoom } = require('./src/rooms');
+const api = require('./src/api/api');
+const gitBuild = require('./src/api/git-build');
+const { getRooms, updateRooms, deleteRoom } = require('./src/api/rooms');
 
 app.set('port', port);
 

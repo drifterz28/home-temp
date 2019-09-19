@@ -3,6 +3,7 @@
 const sqlite = require('sqlite');
 const format = require('date-fns/format');
 const subDays = require('date-fns/subDays');
+const buildSql = require('./build-sql');
 
 const dateRanges = {
   day: 1,
@@ -29,7 +30,13 @@ async function dbGet({room, range = 'day'}) {
   const dateRange = getDateRange(range);
   const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
   const roomIp = await dbPromise.all(`SELECT ip FROM rooms WHERE name = '${room}'`);
-  const roomData = await dbPromise.all(`SELECT * FROM temps WHERE ip = '${roomIp[0].ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`);
+  const roomData = await dbPromise.all(`SELECT * FROM temps WHERE ip = '${roomIp[0].ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`).catch((err) => {
+    if(err.errno === 1) {
+      buildSql('temps').then(() => {
+        dbGet({room, range});
+      })
+    }
+  });
   return {
     room,
     data: roomData
