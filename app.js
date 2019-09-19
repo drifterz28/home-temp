@@ -5,12 +5,14 @@ const sqlite = require('sqlite');
 
 const env = process.env;
 const app = express();
-const bundler = new Bundler('./src/index.html', {
-  outDir: './dist',
-  outFile: 'index.html',
-  publicUrl: './',
-  watch: process.env.NODE_ENV !== 'production'
-});
+if(process.env.NODE_ENV !== 'production') {
+  const bundler = new Bundler('./src/index.html', {
+    outDir: './dist',
+    outFile: 'index.html',
+    publicUrl: './',
+    watch: process.env.NODE_ENV !== 'production'
+  });
+}
 const port = process.env.PORT || 5000;
 
 const api = require('./src/api');
@@ -63,7 +65,9 @@ app.post('/api/build', (req, res) => {
   gitBuild(req, res);
 });
 
-app.get('/', bundler.middleware());
+if(process.env.NODE_ENV !== 'production') {
+  app.get('/', bundler.middleware());
+}
 
 app.use(function(req, res, next) {
   res.status(404).send("Sorry can't find that!");

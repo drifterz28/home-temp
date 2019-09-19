@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --inspect app.js",
-    "build": "NODE_ENV=production node app.js"
+    "heroku-postbuild": "yarn build",
+    "build": "parcel build ./src/index.html",
+    "start": "NODE_ENV=production node app.js"
   },
   "engines": {
     "node": "10.x"
