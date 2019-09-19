@@ -4,12 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --inspect index.js",
+    "dev": "nodemon index.js",
     "build": "NODE_ENV=production parcel build ./src/index.html",
     "start": "NODE_ENV=production node index.js"
-  },
-  "engines": {
-    "node": "12.10.0"
   },
   "nodemonConfig": {
     "ignore": [

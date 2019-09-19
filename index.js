@@ -4,13 +4,15 @@ const Bundler = require('parcel-bundler');
 const sqlite = require('sqlite');
 
 const env = process.env;
+const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
+let bundler;
 
-if(process.env.NODE_ENV !== 'production') {
-  const bundler = new Bundler('./src/index.html');
+if(!isProduction) {
+  bundler = new Bundler('./src/index.html', {});
 }
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 const api = require('./src/api/api');
 const gitBuild = require('./src/api/git-build');
@@ -20,7 +22,7 @@ app.set('port', port);
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  if(process.env.NODE_ENV !== 'production') {
+  if(isProduction) {
     res.setHeader("Cache-Control", "public, max-age=2592000");
   }
   res.header(
@@ -62,7 +64,7 @@ app.post('/api/build', (req, res) => {
   gitBuild(req, res);
 });
 
-if(process.env.NODE_ENV !== 'production') {
+if(!isProduction) {
   app.get('/', bundler.middleware());
 }
 

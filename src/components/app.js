@@ -4,76 +4,14 @@ import { makeStyles } from '@material-ui/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
 
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import { get } from '../fetch';
 
 import RoomModel from './room-model';
-
-const data = [
-  {
-    "day": "may 1",
-    "temperature": [
-      -1,
-      10
-    ]
-  },
-  {
-    "day": "may 2",
-    "temperature": [
-      2,
-      15
-    ]
-  },
-  {
-    "day": "may 3",
-    "temperature": [
-      3,
-      12
-    ]
-  },
-  {
-    "day": "may 4",
-    "temperature": [
-      4,
-      12
-    ]
-  },
-  {
-    "day": "may 5",
-    "temperature": [
-      12,
-      16
-    ]
-  },
-  {
-    "day": "may 6",
-    "temperature": [
-      5,
-      16
-    ]
-  },
-  {
-    "day": "may 7",
-    "temperature": [
-      3,
-      12
-    ]
-  },
-  {
-    "day": "may 8",
-    "temperature": [
-      0,
-      8
-    ]
-  },
-  {
-    "day": "may 9",
-    "temperature": [
-      -3,
-      5
-    ]
-  }
-];
 
 const useStyles = makeStyles({
   root: {
@@ -129,12 +67,23 @@ const App = () => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState('');
+  const [data, setData] = useState([]);
+  const [range, setRange] = useState('day');
   const matches = useMediaQuery('(orientation: portrait)');
   const handleOpen = e => {
-    setRoom(e.currentTarget.value);
-    setOpen(true);
+    const room = e.currentTarget.value
+    setRoom(room);
+    get(`/api/temp?room=${room}&range=${range}`).then(data => {
+      setData(data.data);
+      setOpen(true);
+    })
   };
-
+  const hangleRange = range => e => {
+    get(`/api/temp?room=${room}&range=${range}`).then(data => {
+      setRange(range);
+      setData(data.data);
+    })
+  }
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
       <img src='apartment.png' className={`${styles.image} apartment`}/>
@@ -148,13 +97,20 @@ const App = () => {
       >
         <div className={styles.paper}>
           <h2 id="simple-modal-title">{room} room</h2>
+          <ButtonGroup color="primary" aria-label="outlined primary button group">
+            <Button onClick={hangleRange('day')}>1 day</Button>
+            <Button onClick={hangleRange('week')}>1 week</Button>
+            <Button onClick={hangleRange('month')}>1 month</Button>
+          </ButtonGroup>
           <AreaChart width={600} height={400} data={data}
             margin={{top: 10, right: 30, left: 0, bottom: 0}}>
             <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="day"/>
+            <XAxis dataKey="timestamp"/>
             <YAxis/>
             <Tooltip/>
-            <Area type='monotone' dataKey='temperature' stroke='#8884d8' fill='#8884d8' />
+            <Area type='monotone' dataKey='temp' stroke='#8884d8' />
+            {room === 'outside' &&
+              <Area type='monotone' dataKey='hum' stroke='#ooo' />}
           </AreaChart>
         </div>
       </Modal>
