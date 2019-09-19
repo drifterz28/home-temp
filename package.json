@@ -7,6 +7,9 @@
     "dev": "nodemon --inspect app.js",
     "build": "NODE_ENV=production node app.js"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "nodemonConfig": {
     "ignore": [
       ".cache/*",

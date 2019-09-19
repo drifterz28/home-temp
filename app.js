@@ -11,7 +11,7 @@ const bundler = new Bundler('./src/index.html', {
   publicUrl: './',
   watch: process.env.NODE_ENV !== 'production'
 });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 const api = require('./src/api');
 const gitBuild = require('./src/git-build');
