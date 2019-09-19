@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --inspect index.js",
-    "build": "parcel build ./src/index.html",
+    "build": "NODE_ENV=production parcel build ./src/index.html",
     "start": "NODE_ENV=production node index.js"
   },
   "engines": {
