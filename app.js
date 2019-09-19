@@ -9,8 +9,7 @@ const bundler = new Bundler('./src/index.html', {
   outDir: './dist',
   outFile: 'index.html',
   publicUrl: './',
-  watch: process.env.NODE_ENV !== 'production',
-  sourceMaps: process.env.NODE_ENV !== 'production'
+  watch: process.env.NODE_ENV !== 'production'
 });
 const port = process.env.PORT || 3000;
 
