@@ -4,13 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon app.js",
-    "build": "NODE_ENV=development parcel build ./src/index.html --no-source-maps",
-    "stop": "pm2 stop app",
-    "clean": "rm -r dist/*",
-    "prod": "NODE_ENV=production nodemon app.js",
-    "start": "NODE_ENV=production pm2 start app.js",
-    "deploy": "git pull && yarn && yarn stop && yarn start"
+    "dev": "nodemon --inspect app.js",
+    "build": "NODE_ENV=production node app.js",
   },
   "nodemonConfig": {
     "ignore": [
