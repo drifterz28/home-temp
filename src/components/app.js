@@ -9,7 +9,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import format from 'date-fns/format';
 
 import {LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Line} from 'recharts';
-
+import { useAuth0 } from "../react-auth0-wrapper";
 import RoomModel from './room-model';
 import GraphModal from './graph-modal';
 import useFetch from './hook-fetch';
@@ -55,6 +55,7 @@ const useStyles = makeStyles({
 
 const App = () => {
   const styles = useStyles();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState('');
   const matches = useMediaQuery('(orientation: portrait)');
@@ -66,12 +67,22 @@ const App = () => {
   };
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
-      <img src='apartment.png' className={`${styles.image} apartment`}/>
-      {roomTemps.map((room, i) => {
-        return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
-      })}
-      <GraphModal {...{setRoom, room, setOpen, open}} />
-      <RoomModel />
+      {isAuthenticated ?
+        <>
+          <img src='apartment.png' className={`${styles.image} apartment`}/>
+          {roomTemps.map((room, i) => {
+            return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
+          })}
+          <GraphModal {...{setRoom, room, setOpen, open}} />
+          <RoomModel />
+        </> : <button
+          onClick={() =>
+            loginWithRedirect({})
+          }
+        >
+          Log in
+        </button>
+      }
     </Container>
   )
 };
