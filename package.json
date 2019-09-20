@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon index.js",
+    "test": "jest",
     "build": "NODE_ENV=production parcel build ./src/index.html",
     "start": "NODE_ENV=production node index.js"
   },
@@ -25,7 +26,9 @@
     "@material-ui/styles": "^4.4.1",
     "date-fns": "^2.2.1",
     "express": "^4.17.1",
+    "jest": "^24.9.0",
     "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "recharts": "^1.7.1",

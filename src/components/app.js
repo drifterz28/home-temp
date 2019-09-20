@@ -67,7 +67,7 @@ const App = () => {
   };
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
-      {isAuthenticated ?
+      {true ?
         <>
           <img src='apartment.png' className={`${styles.image} apartment`}/>
           {roomTemps.map((room, i) => {
