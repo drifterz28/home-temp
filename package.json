@@ -7,7 +7,7 @@
     "dev": "nodemon index.js",
     "test": "jest",
     "build": "parcel build ./src/index.html",
-    "start": "yarn build && node index.js"
+    "start": "node index.js"
   },
   "nodemonConfig": {
     "ignore": [
