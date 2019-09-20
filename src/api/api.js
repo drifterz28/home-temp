@@ -47,16 +47,15 @@ async function dbGet({room, range = 'day'}) {
 
 const getCurrentTemps = async (req, res) => {
   const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
-  const roomCount = await dbPromise.all(`SELECT count(DISTINCT ip) FROM temps`);
-  const count = Object.values(roomCount[0])[0];
-  const roomData = await dbPromise.all(`SELECT temps.ip, temp, name FROM temps INNER JOIN rooms ON rooms.ip = temps.ip ORDER BY timestamp DESC LIMIT ${count}`).catch((err) => {
-    console.log(err)
+  const roomCount = await dbPromise.all(`SELECT count(DISTINCT ip) FROM temps`).catch((err) => {
     if(err.errno === 1) {
       buildSql('temps').then(() => {
         dbGet({room, range});
-      })
+      });
     }
   });
+  const count = Object.values(roomCount[0])[0];
+  const roomData = await dbPromise.all(`SELECT temps.ip, temp, name FROM temps INNER JOIN rooms ON rooms.ip = temps.ip ORDER BY timestamp DESC LIMIT ${count}`);
   res.status(200).json(roomData);
 };
 

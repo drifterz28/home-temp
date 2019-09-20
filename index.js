@@ -23,7 +23,7 @@ app.set('port', port);
 app.use(requireHTTPS, (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   if(isProduction) {
-    res.setHeader("Cache-Control", "public, max-age=2592000");
+    // res.setHeader("Cache-Control", "public, max-age=2592000");
   }
   res.header(
     'Access-Control-Allow-Headers',
@@ -34,7 +34,7 @@ app.use(requireHTTPS, (req, res, next) => {
 
 function requireHTTPS(req, res, next) {
   // The 'x-forwarded-proto' check is for Heroku
-  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && isProduction) {
     return res.redirect('https://' + req.get('host') + req.url);
   }
   next();
