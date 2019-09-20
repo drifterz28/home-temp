@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "test": "jest",
-    "build": "NODE_ENV=production parcel build ./src/index.html",
-    "start": "NODE_ENV=production node index.js"
+    "build": "parcel build ./src/index.html",
+    "start": "yarn build && node index.js"
   },
   "nodemonConfig": {
     "ignore": [
