@@ -87,8 +87,8 @@ const RoomModel = () => {
       >
         <Paper className={styles.paper}>
           <form>
-            {rooms.length > 0 && <EditRoom rooms={rooms} deleteRoom={deleteRoom} selectRoom={selectRoom} />}
-            <AddRoom handleChange={handleChange} toggleModel={toggleModel} saveRoom={saveRoom} form={form}/>
+            {rooms.length > 0 && <EditRoom {...{rooms, deleteRoom, selectRoom}} />}
+            <AddRoom {...{handleChange, toggleModel, saveRoom, form}}/>
           </form>
         </Paper>
       </Modal>

@@ -43,6 +43,21 @@ async function dbGet({room, range = 'day'}) {
   };
 }
 
+const getCurrentTemps = async (req, res) => {
+  const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
+  const roomCount = await dbPromise.all(`SELECT count(DISTINCT ip) FROM temps`);
+  const count = Object.values(roomCount[0])[0];
+  const roomData = await dbPromise.all(`SELECT temps.ip, temp, name FROM temps INNER JOIN rooms ON rooms.ip = temps.ip ORDER BY timestamp DESC LIMIT ${count}`).catch((err) => {
+    console.log(err)
+    if(err.errno === 1) {
+      buildSql('temps').then(() => {
+        dbGet({room, range});
+      })
+    }
+  });
+  res.status(200).json(roomData);
+};
+
 module.exports = (req, res) => {
   const query = req.query;
   const ip = req.headers['x-forwarded-for'] ||
@@ -59,6 +74,6 @@ module.exports = (req, res) => {
       res.send(JSON.stringify(data));
     });
   } else {
-    res.status(200).json({all: 'sweet'});
+    getCurrentTemps(req, res);
   }
 };

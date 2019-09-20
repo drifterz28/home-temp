@@ -6,12 +6,13 @@ import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import format from 'date-fns/format';
 
-
-import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
-import { get } from '../fetch';
+import {LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Line} from 'recharts';
 
 import RoomModel from './room-model';
+import GraphModal from './graph-modal';
+import useFetch from './hook-fetch';
 
 const useStyles = makeStyles({
   root: {
@@ -49,17 +50,6 @@ const useStyles = makeStyles({
       top: '80%',
       left: '53%'
     }
-  },
-  paper: {
-    position: 'absolute',
-    backgroundColor: '#fff',
-    padding: 20,
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`,
-    '&:focus': {
-      outline: 'none'
-    }
   }
 });
 
@@ -67,53 +57,20 @@ const App = () => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState('');
-  const [data, setData] = useState([]);
-  const [range, setRange] = useState('day');
   const matches = useMediaQuery('(orientation: portrait)');
+  const roomTemps = useFetch('/api/temp');
   const handleOpen = e => {
     const room = e.currentTarget.value
     setRoom(room);
-    get(`/api/temp?room=${room}&range=${range}`).then(data => {
-      setData(data.data);
-      setOpen(true);
-    })
+    setOpen(true);
   };
-  const hangleRange = range => e => {
-    get(`/api/temp?room=${room}&range=${range}`).then(data => {
-      setRange(range);
-      setData(data.data);
-    })
-  }
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
       <img src='apartment.png' className={`${styles.image} apartment`}/>
-      <Fab onClick={handleOpen} value='living' color='primary' variant='extended' className={`${styles.rooms} rooms living`}>72°</Fab>
-      <Fab onClick={handleOpen} value='outside' color='secondary' variant='extended' className={`${styles.rooms} rooms outside`}>87°</Fab>
-      <Fab onClick={handleOpen} value='master' color='primary' variant='extended' className={`${styles.rooms} rooms master`}>68°</Fab>
-      <Fab onClick={handleOpen} value='spare' color='primary' variant='extended' className={`${styles.rooms} rooms spare`}>65°</Fab>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <div className={styles.paper}>
-          <h2 id="simple-modal-title">{room} room</h2>
-          <ButtonGroup color="primary" aria-label="outlined primary button group">
-            <Button onClick={hangleRange('day')}>1 day</Button>
-            <Button onClick={hangleRange('week')}>1 week</Button>
-            <Button onClick={hangleRange('month')}>1 month</Button>
-          </ButtonGroup>
-          <AreaChart width={600} height={400} data={data}
-            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="timestamp"/>
-            <YAxis/>
-            <Tooltip/>
-            <Area type='monotone' dataKey='temp' stroke='#8884d8' />
-            {room === 'outside' &&
-              <Area type='monotone' dataKey='hum' stroke='#ooo' />}
-          </AreaChart>
-        </div>
-      </Modal>
+      {roomTemps.map((room, i) => {
+        return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
+      })}
+      <GraphModal {...{setRoom, room, setOpen, open}} />
       <RoomModel />
     </Container>
   )
