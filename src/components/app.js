@@ -55,7 +55,7 @@ const useStyles = makeStyles({
 
 const App = () => {
   const styles = useStyles();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState('');
   const matches = useMediaQuery('(orientation: portrait)');
@@ -67,22 +67,12 @@ const App = () => {
   };
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
-      {isAuthenticated ?
-        <>
-          <img src='apartment.png' className={`${styles.image} apartment`}/>
-          {roomTemps.map((room, i) => {
-            return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
-          })}
-          <GraphModal {...{setRoom, room, setOpen, open}} />
-          <RoomModel />
-        </> : <button
-          onClick={() =>
-            loginWithRedirect({})
-          }
-        >
-          Log in
-        </button>
-      }
+      <img src='apartment.png' className={`${styles.image} apartment`}/>
+      {roomTemps.map((room, i) => {
+        return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
+      })}
+      <GraphModal {...{setRoom, room, setOpen, open}} />
+      <RoomModel />
     </Container>
   )
 };

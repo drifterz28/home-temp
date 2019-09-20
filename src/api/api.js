@@ -69,7 +69,7 @@ module.exports = (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   if(query.temp) {
     dbRun({...query, ip});
-    res.status(200).json({all: 'good'});
+    res.status(200).json({...query, ip});
   } else
   if(query.room) {
     dbGet(query).then(data => {
