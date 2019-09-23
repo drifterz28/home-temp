@@ -15,7 +15,6 @@ if(!isProduction) {
 const port = process.env.PORT || 3000;
 
 const api = require('./src/api/api');
-const gitBuild = require('./src/api/git-build');
 const { getRooms, updateRooms, deleteRoom } = require('./src/api/rooms');
 
 app.set('port', port);
