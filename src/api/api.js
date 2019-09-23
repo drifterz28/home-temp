@@ -1,7 +1,7 @@
 const format = require('date-fns/format');
 const subDays = require('date-fns/subDays');
-const highLow = require('.../lib/build-sqllow.js');
-const db = require('../lib/high-low.js/index.js');
+const highLow = require('../lib/high-low.js');
+const db = require('../lib/index.js');
 
 const dateRanges = {
   day: 1,
