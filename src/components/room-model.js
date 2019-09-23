@@ -6,8 +6,6 @@ import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 
-import { useAuth0 } from "../react-auth0-wrapper";
-
 import { get, post, fetchDelete } from '../fetch';
 
 import EditRoom from './edit-room';
@@ -31,17 +29,12 @@ const useStyles = makeStyles({
 
 const RoomModel = () => {
   const styles = useStyles();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState({});
   const [form, setForm] = useState(initForm);
   const [rooms, setRooms] = useState([]);
   const toggleModel = () => {
-    if(isAuthenticated) {
-      setOpen(!open);
-    } else {
-      loginWithRedirect();
-    }
+    setOpen(!open);
   };
 
   const handleChange = name => event => {
@@ -86,7 +79,7 @@ const RoomModel = () => {
   return (
     <div>
       <Fab color="secondary" aria-label="edit" onClick={toggleModel}>
-        {isAuthenticated ? <EditIcon /> : <Lock/>}
+        <EditIcon />
       </Fab>
       <Modal
         open={open}
