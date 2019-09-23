@@ -13,30 +13,33 @@ const getDateRange = (range) => {
   const dayRange = dateRanges[range];
   const date = subDays(new Date(), dayRange);
   return {
-    start: format(new Date(), 'yyyy-MM-dd') + ' 23:59:59',
-    end: format(date, 'yyyy-MM-dd') + ' 00:00:00'
+    start: format(new Date(), 'yyyy-MM-dd') + 'T23:59:59',
+    end: format(date, 'yyyy-MM-dd') + 'T00:00:00'
   };
 };
 
-async function dbRun(query) {
+async function setRoomTemp(query) {
   query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3)", [ query.ip, query.temp, query.hum ]);
 };
 
-async function dbGet({room, range = 'day'}) {
+async function getRoomTemps({room, range = 'day'}) {
   const dateRange = getDateRange(range);
-  const roomIp = await db.query(`SELECT ip FROM rooms WHERE name = '${room}'`);
+  const roomIp = await db.query(`SELECT ip FROM rooms WHERE name = '${room}'`).catch(err => {console.error(err)});
   const ip = roomIp.rows[0].ip;
   // TODO: rewite with join
-  let roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`);
-  if(range !== 'day') {
-    roomData = highLow(roomData.rows);
-  } else {
-    roomData = roomData.rows;
-  }
+  const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
+    .then(data => (range !== 'day' ? highLow(data.rows) : data.rows));
   return {
     room,
     data: roomData
   };
+}
+
+const getIpAddress = req => {
+  return req.headers['x-forwarded-for'] ||
+  req.connection.remoteAddress ||
+  req.socket.remoteAddress ||
+  (req.connection.socket ? req.connection.socket.remoteAddress : null);
 }
 
 const getCurrentTemps = async (req, res) => {
@@ -48,17 +51,14 @@ const getCurrentTemps = async (req, res) => {
 
 module.exports = async (req, res) => {
   const query = req.query;
-  const ip = req.headers['x-forwarded-for'] ||
-  req.connection.remoteAddress ||
-  req.socket.remoteAddress ||
-  (req.connection.socket ? req.connection.socket.remoteAddress : null);
+  const ip = getIpAddress(req);
   res.setHeader('Content-Type', 'application/json');
   if(query.temp) {
-    dbRun({...query, ip});
+    setRoomTemp({...query, ip});
     res.status(200).json({...query, ip});
   } else
   if(query.room) {
-    dbGet(query).then(data => {
+    getRoomTemps(query).then(data => {
       res.send(JSON.stringify(data));
     });
   } else {

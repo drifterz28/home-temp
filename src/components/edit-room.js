@@ -17,7 +17,6 @@ const useStyles = makeStyles({
 
 const EditRoom = ({rooms, deleteRoom, selectRoom}) => {
   const styles = useStyles();
-  console.log('test')
   return (
     <>
       <Typography variant="h6">

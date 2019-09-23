@@ -9,7 +9,6 @@ const CustomizedAxisTick = ({x, y, stroke, payload, range}) => {
     month: 'MM/dd'
   };
   const date = range === 'day' ? payload.value : payload.value + 'T00:00:00';
-  console.log(date)
   return (
     <g transform={`translate(${x},${y})`}>
       <text x={0} y={0} dy={16} textAnchor='middle' fill='#666'>{format(new Date(date), dateFormat[range])}</text>
@@ -36,7 +35,6 @@ export const DayGraph = ({data, range, room}) => {
 };
 
 export const HighLowGraph = ({data, range}) => {
-  console.log(data)
   return (
     <LineChart width={800} height={400} data={data} margin={{top: 10}}>
       <CartesianGrid strokeDasharray='3 3'/>
