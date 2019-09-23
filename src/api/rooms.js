@@ -1,30 +1,20 @@
-const sqlite = require('sqlite');
-const buildSql = require('./build-sql');
+const db = require('../lib/connect');
 
 async function getRooms(req, res) {
-  const dbPromise = await sqlite.open('./sqlite.sqlite', { Promise });
-  dbPromise.all(`SELECT rowid AS id, * FROM rooms`).then((rooms) => {
-    res.status(200).json(rooms);
-  }).catch((err) => {
-    if(err.errno === 1) {
-      buildSql('rooms').then(() => {
-        getRooms(req, res);
-      })
-    }
+  db.query(`SELECT * FROM rooms`).then((rooms) => {
+    res.status(200).json(rooms.rows);
   });
 }
 
 const updateRooms = async (req, res) => {
   const query = req.body;
-  const dbPromise = await sqlite.open('./sqlite.sqlite');
-  const results = await dbPromise.run(`INSERT INTO rooms VALUES ($ip, $name)`, [query.ip, query.room]);
+  db.query('INSERT INTO rooms(ip, name) VALUES ($1, $2)', [query.ip, query.room]);
   res.status(200).json({all: 'good'});
 }
 
 const deleteRoom = async (req, res) => {
   const query = req.body;
-  const dbPromise = await sqlite.open('./sqlite.sqlite');
-  const results = await dbPromise.run(`DELETE FROM rooms WHERE ip = ?`, [query.ip]);
+  db.query(`DELETE FROM rooms WHERE ip = ?`, [query.ip]);
   res.status(200).json({all: 'good'});
 }
 

@@ -14,6 +14,7 @@ const buildObject = (data) => {
 }
 
 module.exports = (data) => {
+  console.log(data)
   const dateObj = buildObject(data);
   const obj = Object.keys(dateObj).reduce((accum, key) => {
     accum.push({

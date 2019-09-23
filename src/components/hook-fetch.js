@@ -3,9 +3,11 @@ import {get} from '../fetch';
 
 const useFetch = (url) => {
   const [ data, setData ] = useState([]);
+  const [didFetch, setDidFetch] = useState(false);
   useEffect(() => {
-    if (data.length === 0) {
+    if (!didFetch) {
       get(url).then(datas => {
+        setDidFetch(true);
         setData(datas);
       })
     }

@@ -1,7 +1,7 @@
+require('dotenv').config();
 const fs = require('fs');
 const express = require('express');
 const Bundler = require('parcel-bundler');
-const sqlite = require('sqlite');
 
 const env = process.env;
 const isProduction = process.env.NODE_ENV === 'production';
