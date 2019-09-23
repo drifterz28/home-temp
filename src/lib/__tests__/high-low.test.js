@@ -1,5 +1,5 @@
 const highLow = require('../high-low.js');
-const data = require('./test-data.json');
+const data = require('./test-data.json.js');
 
 const goodData = [ { date: '2019-09-19', high: 75, low: 68 },
 { date: '2019-09-18', high: 75, low: 64 },

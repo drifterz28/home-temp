@@ -1,8 +1,7 @@
 const format = require('date-fns/format');
 const subDays = require('date-fns/subDays');
-const buildSql = require('./build-sql');
-const highLow = require('./high-low.js');
-const db = require('../lib/connect');
+const highLow = require('.../lib/build-sqllow.js');
+const db = require('../li../lib/high-low.js/index.js
 
 const dateRanges = {
   day: 1,
@@ -27,6 +26,7 @@ async function dbGet({room, range = 'day'}) {
   const dateRange = getDateRange(range);
   const roomIp = await db.query(`SELECT ip FROM rooms WHERE name = '${room}'`);
   const ip = roomIp.rows[0].ip;
+  // TODO: rewite with join
   let roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`);
   if(range !== 'day') {
     roomData = highLow(roomData.rows);
