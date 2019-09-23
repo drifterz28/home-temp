@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
   };
 };
 
-const pool = new Pool();
+const pool = new Pool(connectionString);
 module.exports = {
   query: (text, params = []) => pool.query(text, params),
 }
