@@ -16,7 +16,8 @@
       "node_modules/*",
       "yarn.log",
       "*.sqlite",
-      "src/components/*"
+      "src/components/*",
+      "arduino/*"
     ]
   },
   "dependencies": {
