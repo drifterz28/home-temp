@@ -48,7 +48,7 @@ app.get('/api/temp', (req, res) => {
   api(req, res);
 });
 
-app.use(express.json())
+app.use(express.json());
 
 app.route('/api/rooms')
   .get((req, res) => {
