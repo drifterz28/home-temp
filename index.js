@@ -19,17 +19,17 @@ const { getRooms, updateRooms, deleteRoom } = require('./src/api/rooms');
 
 app.set('port', port);
 
-app.use(requireHTTPS, (req, res, next) => {
+function setCache(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   if(isProduction) {
-    // res.setHeader("Cache-Control", "public, max-age=2592000");
+    res.setHeader("Cache-Control", "public, max-age=2592000");
   }
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
-});
+}
 
 function requireHTTPS(req, res, next) {
   // The 'x-forwarded-proto' check is for Heroku
@@ -39,7 +39,7 @@ function requireHTTPS(req, res, next) {
   next();
 }
 
-app.use(express.static('dist'));
+app.use(express.static('dist'), requireHTTPS, setCache);
 
 app.get('/test', (req, res) => {
   res.send('Hello World!');
