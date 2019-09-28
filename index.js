@@ -25,7 +25,7 @@ function requireHTTPS(req, res, next) {
     return res.redirect('https://' + req.get('host') + req.url);
   }
   next();
-}
+};
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -34,11 +34,7 @@ app.use((req, res, next) => {
     'Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
-})
-
-app.use(express.static('dist', {
-  maxAge: 86400
-}), requireHTTPS);
+});
 
 app.get('/test', (req, res) => {
   res.send('Hello World!');
@@ -69,6 +65,10 @@ app.route('/api/rooms')
 app.post('/api/build', (req, res) => {
   gitBuild(req, res);
 });
+
+app.use(express.static('dist', {
+  maxAge: 86400
+}), requireHTTPS);
 
 if(!isProduction) {
   app.get('/', bundler.middleware());
