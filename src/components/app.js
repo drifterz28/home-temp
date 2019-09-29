@@ -57,11 +57,10 @@ const App = () => {
   const styles = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [room, setRoom] = useState('');
+  const [room, setRoom] = useState({});
   const matches = useMediaQuery('(orientation: portrait)');
   const roomTemps = useFetch('/api/temp');
-  const handleOpen = e => {
-    const room = e.currentTarget.value
+  const handleOpen = room => e => {
     setRoom(room);
     setOpen(true);
   };
@@ -69,7 +68,7 @@ const App = () => {
     <Container maxWidth='sm' className={`${styles.root}`}>
       <img src='apartment.png' className={`${styles.image} apartment`}/>
       {roomTemps.map((room, i) => {
-        return <Fab key={i} onClick={handleOpen} value={room.name} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
+        return <Fab key={i} onClick={handleOpen(room)} value={room.ip} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
       })}
       <GraphModal {...{setRoom, room, setOpen, open}} />
       <RoomModel />

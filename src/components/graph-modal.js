@@ -23,13 +23,13 @@ const useStyles = makeStyles({
   }
 });
 
-const GraphModel = ({setRoom, room, setOpen, open}) => {
+const GraphModel = ({setRoomIp, room, setOpen, open}) => {
   const [range, setRange] = useState('day');
   const [data, setData] = useState([]);
 
   const hangleRange = range => e => {
     setData({});
-    get(`/api/temp?room=${room}&range=${range}`).then(data => {
+    get(`/api/temp?ip=${room.ip}&range=${range}`).then(data => {
       setRange(range);
       setData(data.data);
     })
@@ -37,7 +37,7 @@ const GraphModel = ({setRoom, room, setOpen, open}) => {
 
   useEffect(() => {
     if(room) {
-      get(`/api/temp?room=${room}&range=${range}`).then(data => {
+      get(`/api/temp?ip=${room.ip}&range=${range}`).then(data => {
         setData(data.data);
       });
     }
@@ -50,13 +50,13 @@ const GraphModel = ({setRoom, room, setOpen, open}) => {
       onClose={() => setOpen(false)}
     >
       <div className={styles.paper}>
-        <h2 id="simple-modal-title">{room} room</h2>
+        <h2 id="simple-modal-title">{room.name} room</h2>
         <ButtonGroup color="primary" aria-label="outlined primary button group">
           <Button onClick={hangleRange('day')}>1 day</Button>
           <Button onClick={hangleRange('week')}>1 week</Button>
           <Button onClick={hangleRange('month')}>1 month</Button>
         </ButtonGroup>
-        {range === 'day' ? <DayGraph data={data} room={room} range={range} /> : <HighLowGraph data={data} range={range} /> }
+        {range === 'day' ? <DayGraph data={data} room={room.name} range={range} /> : <HighLowGraph data={data} range={range} /> }
       </div>
     </Modal>
   );

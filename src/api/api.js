@@ -26,15 +26,12 @@ async function setRoomTemp(query) {
   });
 };
 
-async function getRoomTemps({room, range = 'day'}) {
+async function getRoomTemps({ip, range = 'day'}) {
   const dateRange = getDateRange(range);
-  const roomIp = await db.query(`SELECT ip FROM rooms WHERE name = '${room}'`).catch(err => {console.error(err)});
-  const ip = roomIp.rows[0].ip;
   // TODO: rewite with join
   const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
     .then(data => (range !== 'day' ? highLow(data.rows) : data.rows));
   return {
-    room,
     data: roomData
   };
 }
@@ -61,7 +58,7 @@ module.exports = async (req, res) => {
     setRoomTemp({...query});
     res.status(200).json({...query});
   } else
-  if(query.room) {
+  if(query.ip) {
     getRoomTemps(query).then(data => {
       res.send(JSON.stringify(data));
     });
