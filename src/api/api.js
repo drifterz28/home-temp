@@ -19,7 +19,11 @@ const getDateRange = (range) => {
 };
 
 async function setRoomTemp(query) {
-  db.query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3, current_timestamp)", [ query.ip, query.temp, query.hum ]);
+  const temp = Number(query.temp).toFixed(0);
+  const hum = Number(query.hum).toFixed(0);
+  db.query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3, current_timestamp)", [ query.ip, temp, hum ]).catch(err => {
+    console.log(err);
+  });
 };
 
 async function getRoomTemps({room, range = 'day'}) {
@@ -54,8 +58,8 @@ module.exports = async (req, res) => {
   const ip = getIpAddress(req);
   res.setHeader('Content-Type', 'application/json');
   if(query.temp) {
-    setRoomTemp({...query, ip});
-    res.status(200).json({...query, ip});
+    setRoomTemp({...query});
+    res.status(200).json({...query});
   } else
   if(query.room) {
     getRoomTemps(query).then(data => {
