@@ -14,7 +14,7 @@ const updateRooms = async (req, res) => {
 
 const deleteRoom = async (req, res) => {
   const query = req.body;
-  db.query(`DELETE FROM rooms WHERE ip = ?`, [query.ip]);
+  db.query(`DELETE FROM rooms WHERE ip = $1`, [query.ip]);
   res.status(200).json({all: 'good'});
 }
 

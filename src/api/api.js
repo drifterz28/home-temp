@@ -19,18 +19,19 @@ const getDateRange = (range) => {
 };
 
 async function setRoomTemp(query) {
-  db.query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3, current_timestamp)", [ query.ip, query.temp, query.hum ]);
+  const temp = Number(query.temp).toFixed(0);
+  const hum = Number(query.hum).toFixed(0);
+  db.query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3, current_timestamp)", [ query.ip, temp, hum ]).catch(err => {
+    console.log(err);
+  });
 };
 
-async function getRoomTemps({room, range = 'day'}) {
+async function getRoomTemps({ip, range = 'day'}) {
   const dateRange = getDateRange(range);
-  const roomIp = await db.query(`SELECT ip FROM rooms WHERE name = '${room}'`).catch(err => {console.error(err)});
-  const ip = roomIp.rows[0].ip;
   // TODO: rewite with join
   const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
     .then(data => (range !== 'day' ? highLow(data.rows) : data.rows));
   return {
-    room,
     data: roomData
   };
 }
@@ -52,10 +53,10 @@ module.exports = async (req, res) => {
   const ip = getIpAddress(req);
   res.setHeader('Content-Type', 'application/json');
   if(query.temp) {
-    setRoomTemp({...query, ip});
-    res.status(200).json({...query, ip});
+    setRoomTemp({...query});
+    res.status(200).json({...query});
   } else
-  if(query.room) {
+  if(query.ip) {
     getRoomTemps(query).then(data => {
       res.send(JSON.stringify(data));
     });
