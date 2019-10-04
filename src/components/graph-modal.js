@@ -36,7 +36,7 @@ const GraphModel = ({setRoomIp, room, setOpen, open}) => {
   };
 
   useEffect(() => {
-    if(room) {
+    if(room.ip) {
       get(`/api/temp?ip=${room.ip}&range=${range}`).then(data => {
         setData(data.data);
       });

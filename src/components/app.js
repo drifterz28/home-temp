@@ -7,6 +7,8 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import format from 'date-fns/format';
+import isSameDay from 'date-fns/isSameDay';
+import SignalWifiOffIcon from '@material-ui/icons/SignalWifiOff';
 
 import {LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Line} from 'recharts';
 import { useAuth0 } from "../react-auth0-wrapper";
@@ -53,6 +55,20 @@ const useStyles = makeStyles({
   }
 });
 
+const RoomTempButton = ({room, handleOpen}) => {
+  const styles = useStyles();
+
+  return <Fab
+    onClick={handleOpen(room)}
+    value={room.ip}
+    color={room.temp > 76 ? 'secondary' : 'primary'}
+    variant='extended'
+    className={`${styles.rooms} rooms ${room.name}`}>
+      {room.temp}°
+      {!isSameDay(new Date(), new Date(room.timestamp)) && <SignalWifiOffIcon fontSize='small' />}
+    </Fab>
+}
+
 const App = () => {
   const styles = useStyles();
 
@@ -67,9 +83,7 @@ const App = () => {
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
       <img src='apartment.png' className={`${styles.image} apartment`}/>
-      {roomTemps.map((room, i) => {
-        return <Fab key={i} onClick={handleOpen(room)} value={room.ip} color={room.temp > 76 ? 'secondary' : 'primary'} variant='extended' className={`${styles.rooms} rooms ${room.name}`}>{room.temp}°</Fab>
-      })}
+      {roomTemps.map((room, i) => <RoomTempButton key={i} room={room} handleOpen={handleOpen} />)}
       <GraphModal {...{setRoom, room, setOpen, open}} />
       <RoomModel />
     </Container>
