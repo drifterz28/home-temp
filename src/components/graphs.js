@@ -28,8 +28,7 @@ export const DayGraph = ({data, range, room}) => {
       <YAxis/>
       <Tooltip labelFormatter={tooltipFormater}/>
       <Line type='monotone' dataKey='temp' stroke='#8884d8' dot={false} label={false}/>
-      {room === 'outside' &&
-        <Line type='monotone' dataKey='hum' stroke='#82ca9d' dot={false}/>}
+      <Line type='monotone' dataKey='hum' stroke='#82ca9d' dot={false}/>
     </LineChart>
   );
 };

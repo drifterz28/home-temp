@@ -28,7 +28,6 @@ async function setRoomTemp(query) {
 
 async function getRoomTemps({ip, range = 'day'}) {
   const dateRange = getDateRange(range);
-  // TODO: rewite with join
   const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
     .then(data => (range !== 'day' ? highLow(data.rows) : data.rows));
   return {
