@@ -43,7 +43,6 @@ const getIpAddress = req => {
 }
 
 const getCurrentTemps = async (req, res) => {
-  db.query('ALTER TABLE temps ADD COLUMN airQuality smallint');
   const roomData = await db.query(`SELECT DISTINCT ON (temps.ip) temps.ip, temp, name, timestamp FROM temps INNER JOIN rooms ON rooms.ip = temps.ip ORDER BY temps.ip DESC`);
   res.status(200).json(roomData.rows);
 };
