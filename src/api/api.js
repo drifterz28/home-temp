@@ -43,8 +43,18 @@ const getIpAddress = req => {
 }
 
 const getCurrentTemps = async (req, res) => {
-  const roomData = await db.query(`SELECT DISTINCT ON (temps.ip) temps.ip, temp, name, timestamp FROM temps INNER JOIN rooms ON rooms.ip = temps.ip`);
-  res.status(200).json(roomData.rows);
+  const GetAllRooms = await db.query(`SELECT ip, name FROM rooms;`);
+
+  const roomData = GetAllRooms.rows.map(async (row) => {
+    const room = await db.query(`SELECT * FROM temps WHERE ip = '${row.ip}' ORDER BY id DESC LIMIT 1`);
+    const { rows } = room;
+    return {
+      ...rows[0],
+      name: row.name
+    };
+  });
+  const roomInfo = await Promise.all(roomData);
+  res.status(200).json(roomInfo);
 };
 
 module.exports = async (req, res) => {
