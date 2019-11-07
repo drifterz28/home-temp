@@ -3,7 +3,6 @@ const fs = require('fs');
 const express = require('express');
 const Bundler = require('parcel-bundler');
 
-const env = process.env;
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 let bundler;
@@ -23,8 +22,9 @@ function requireHTTPS(req, res, next) {
   // The 'x-forwarded-proto' check is for Heroku
   if (!req.secure && req.get('x-forwarded-proto') !== 'https' && isProduction) {
     return res.redirect('https://' + req.get('host') + req.url);
+  } else {
+    next();
   }
-  next();
 };
 
 app.use((req, res, next) => {
@@ -67,7 +67,7 @@ app.post('/api/build', (req, res) => {
 });
 
 app.use(express.static('dist', {
-  maxAge: 86400
+  maxAge: 0
 }), requireHTTPS);
 
 if(!isProduction) {
