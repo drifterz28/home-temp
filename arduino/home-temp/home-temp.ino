@@ -3,10 +3,10 @@
 #include <ESP8266HTTPClient.h>
 
 // change these values
-const char* ssid = "empire-2.4";
-const char* pass = "5038038883";
+const char* ssid = "-2.4";
+const char* pass = "";
 String url = "http://home.drifterz28.com/api/temp";
-int main_delay = 30; // delay in min for the loop
+int main_delay = 20; // delay in min for the loop
 bool isFahrenheit = true;
 // no change past here
 

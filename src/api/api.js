@@ -19,8 +19,10 @@ const getDateRange = (range) => {
 };
 
 async function setRoomTemp(query) {
-  const temp = Number(query.temp).toFixed(0);
-  const hum = Number(query.hum).toFixed(0);
+  const tempAdjust = -10;
+  const humidityAdjust = 0;
+  const temp = (Number(query.temp) + tempAdjust).toFixed(0);
+  const hum = (Number(query.hum) + humidityAdjust).toFixed(0);
   db.query("INSERT INTO temps(ip, temp, hum, timestamp) VALUES ($1, $2, $3, current_timestamp)", [ query.ip, temp, hum ]).catch(err => {
     console.log(err);
   });

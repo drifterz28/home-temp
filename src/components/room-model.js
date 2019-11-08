@@ -24,6 +24,11 @@ const useStyles = makeStyles({
     '&:focus': {
       outline: 'none'
     }
+  },
+  button: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10
   }
 });
 
@@ -33,6 +38,8 @@ const RoomModel = () => {
   const [room, setRoom] = useState({});
   const [form, setForm] = useState(initForm);
   const [rooms, setRooms] = useState([]);
+  const [showRooms, setShowRooms] = useState(false);
+
   const toggleModel = () => {
     setOpen(!open);
   };
@@ -69,16 +76,28 @@ const RoomModel = () => {
       setRooms(data);
     });
   }
-
   useEffect(() => {
+    const P_KEY_CODE = 80;
+    const handleKeyPress = e => {
+      if (e.shiftKey && e.keyCode === P_KEY_CODE) {
+        setShowRooms(!showRooms);
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  });
+
+ useEffect(() => {
     if(open && rooms.length === 0) {
       getRooms();
     }
   }, [open]);
-
   return (
-    <div>
-      <Fab color="secondary" aria-label="edit" onClick={toggleModel}>
+    <>
+    {showRooms && <>
+      <Fab color="secondary" aria-label="edit" className={styles.button} onClick={toggleModel}>
         <EditIcon />
       </Fab>
       <Modal
@@ -93,7 +112,9 @@ const RoomModel = () => {
           </form>
         </Paper>
       </Modal>
-    </div>
+    </>
+    }
+    </>
   )
 }
 

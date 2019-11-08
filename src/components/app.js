@@ -74,12 +74,12 @@ const App = () => {
 
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState({});
-  const matches = useMediaQuery('(orientation: portrait)');
-  const roomTemps = useFetch('/api/temp');
+  const roomTemps = useFetch('/api/temp', 5000);
   const handleOpen = room => e => {
     setRoom(room);
     setOpen(true);
   };
+
   return (
     <Container maxWidth='sm' className={`${styles.root}`}>
       <img src='apartment.png' className={`${styles.image} apartment`}/>
