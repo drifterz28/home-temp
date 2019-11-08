@@ -28,7 +28,7 @@ const GraphModel = ({setRoomIp, room, setOpen, open}) => {
   const [data, setData] = useState([]);
 
   const hangleRange = range => e => {
-    setData({});
+    setData([]);
     get(`/api/temp?ip=${room.ip}&range=${range}`).then(data => {
       setRange(range);
       setData(data.data);

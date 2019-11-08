@@ -40,8 +40,10 @@ export const HighLowGraph = ({data, range}) => {
       <XAxis dataKey='date' tick={<CustomizedAxisTick range={range} />}/>
       <YAxis/>
       <Tooltip/>
-      <Line type='monotone' dataKey='high' stroke='#8884d8' dot={false} label={false}/>
-      <Line type='monotone' dataKey='low' stroke='#8884d8' dot={false} label={false}/>
+      <Line type='monotone' name='Temp high' dataKey='tempHigh' stroke='#8884d8' dot={false} label={false}/>
+      <Line type='monotone' name='Temp low' dataKey='tempLow' stroke='#8884d8' dot={false} label={false}/>
+      <Line type='monotone' name='Humitity high' dataKey='humidityHigh' stroke='#82ca9d' dot={false} label={false}/>
+      <Line type='monotone' name='Humitity low' dataKey='humidityLow' stroke='#82ca9d' dot={false} label={false}/>
     </LineChart>
   )
 }

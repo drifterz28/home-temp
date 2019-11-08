@@ -74,7 +74,7 @@ const App = () => {
 
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState({});
-  const roomTemps = useFetch('/api/temp', 5000);
+  const roomTemps = useFetch('/api/temp', 60000);
   const handleOpen = room => e => {
     setRoom(room);
     setOpen(true);

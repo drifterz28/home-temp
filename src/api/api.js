@@ -13,8 +13,8 @@ const getDateRange = (range) => {
   const dayRange = dateRanges[range];
   const date = subDays(new Date(), dayRange);
   return {
-    start: format(new Date(), 'yyyy-MM-dd') + 'T23:59:59',
-    end: format(date, 'yyyy-MM-dd') + 'T00:00:00'
+    start: format(new Date(), 'yyyy-MM-dd'),
+    end: format(date, 'yyyy-MM-dd')
   };
 };
 
@@ -30,7 +30,7 @@ async function setRoomTemp(query) {
 
 async function getRoomTemps({ip, range = 'day'}) {
   const dateRange = getDateRange(range);
-  const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
+  const roomData = await db.query(`SELECT * FROM temps WHERE ip = '${ip}' and timestamp::date BETWEEN '${dateRange.end}' AND '${dateRange.start}'`)
     .then(data => (range !== 'day' ? highLow(data.rows) : data.rows));
   return {
     data: roomData

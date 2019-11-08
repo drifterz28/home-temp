@@ -8,7 +8,10 @@ const app = express();
 let bundler;
 
 if(!isProduction) {
-  bundler = new Bundler('./src/index.html', {});
+  bundler = new Bundler('./src/index.html', {
+    sourceMaps: true,
+    minify: false
+  });
 }
 
 const port = process.env.PORT || 3000;
