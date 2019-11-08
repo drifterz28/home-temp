@@ -67,11 +67,15 @@ app.post('/api/build', (req, res) => {
 });
 
 app.use(express.static('dist', {
-  maxAge: 0
-}), requireHTTPS);
+  maxAge: 86400
+}));
 
 if(!isProduction) {
   app.get('/', bundler.middleware());
+} else {
+  app.get('/', (req, res) =>{
+    res.sendFile(__dirname + '/dist/index.html');
+  }, requireHTTPS);
 }
 
 app.use(function(req, res, next) {
