@@ -21,6 +21,12 @@ export const post = (url, data) => fetcher(url, {
   body: JSON.stringify(data),
 });
 
+export const put = (url, data) => fetcher(url, {
+  method: 'PUT',
+  body: JSON.stringify(data),
+});
+
+
 export const fetchDelete = (url, data) => fetcher(url, {
   method: 'DELETE',
   body: JSON.stringify(data),

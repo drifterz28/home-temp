@@ -17,7 +17,7 @@ if(!isProduction) {
 const port = process.env.PORT || 3000;
 
 const api = require('./src/api/api');
-const { getRooms, updateRooms, deleteRoom } = require('./src/api/rooms');
+const { getRooms, updateRooms, deleteRoom, createRoom } = require('./src/api/rooms');
 
 app.set('port', port);
 
@@ -53,12 +53,11 @@ app.route('/api/rooms')
   .get((req, res) => {
     getRooms(req, res);
   })
-  .put((req, res, next) => {
-    // maybe
-    next(new Error('not implemented'))
+  .put((req, res) => {
+    updateRooms(req, res);
   })
   .post((req, res) => {
-    updateRooms(req, res);
+    createRooms(req, res);
   })
   .delete((req, res, next) => {
     deleteRoom(req, res);

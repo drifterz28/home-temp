@@ -6,12 +6,12 @@ import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 
-import { get, post, fetchDelete } from '../fetch';
+import { get, post, fetchDelete, put } from '../fetch';
 
 import EditRoom from './edit-room';
 import AddRoom from './add-room';
 
-const initForm = {room: '', ip: ''}
+const initForm = {room: '', ip: '', id: false}
 
 const useStyles = makeStyles({
   paper: {
@@ -53,7 +53,8 @@ const RoomModel = () => {
     const selectedRoom = rooms.filter(room => room.id === id);
     setForm({
       room: selectedRoom[0].name,
-      ip: selectedRoom[0].ip
+      ip: selectedRoom[0].ip,
+      id: selectedRoom[0].id
     });
   };
 
@@ -65,10 +66,15 @@ const RoomModel = () => {
   }
 
   const saveRoom = e => {
-    post('/api/rooms', form).then(() => {
+    const theFetch = form.id ? put : post;
+    theFetch('/api/rooms', form).then(() => {
       toggleModel();
       getRooms();
     });
+  }
+
+  const updateRoom = e => {
+    console.log(form)
   }
 
   const getRooms = () => {
@@ -76,6 +82,7 @@ const RoomModel = () => {
       setRooms(data);
     });
   }
+
   useEffect(() => {
     const P_KEY_CODE = 80;
     const handleKeyPress = e => {
@@ -89,11 +96,12 @@ const RoomModel = () => {
     };
   });
 
- useEffect(() => {
+  useEffect(() => {
     if(open && rooms.length === 0) {
       getRooms();
     }
   }, [open]);
+
   return (
     <>
     {showRooms && <>

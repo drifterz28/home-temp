@@ -8,8 +8,14 @@ const AddRoom = ({handleChange, toggleModel, saveRoom, form}) => {
   return (
     <>
       <Typography variant="h6">
-        Add room
+        Add/Edit rooms
       </Typography>
+      <TextField
+        type='hidden'
+        id="room-id"
+        value={form.id}
+        onChange={handleChange('id')}
+      />
       <TextField
         id="room-name"
         label="Room Name"
