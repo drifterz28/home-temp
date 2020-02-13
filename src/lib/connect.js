@@ -1,11 +1,14 @@
-const { Pool } = require('pg');
+const mysql = require('mysql2');
 
 const connectionString = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: true
+  host: 'localhost',
+  user: process.env.DBUSER,
+  password: process.env.DBPASS,
+  database: process.env.DATABASE
 };
 
-const pool = new Pool(connectionString);
+const pool = mysql.createPool(connectionString);
+const promisePool = pool.promise();
 module.exports = {
-  query: (text, params = []) => pool.query(text, params),
+  query: (text, params = []) => promisePool.query(text, params),
 }
