@@ -7,7 +7,7 @@
     "dev": "nodemon index.js",
     "test": "jest",
     "build": "parcel build ./src/index.html",
-    "start": "yarn build && node index.js",
+    "start": "npm run build && node index.js",
     "migrate": "node migrations.js up",
     "update": "git reset --hard origin/master"
   },
